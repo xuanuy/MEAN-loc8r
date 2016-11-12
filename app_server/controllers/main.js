@@ -1,4 +1,5 @@
 /* GET home page. */
+var locations = require('./locations');
 module.exports.index = function (req, res) {
-    res.render('index', {title: 'Express home page'});
+    locations.homelist(req, res);
 };

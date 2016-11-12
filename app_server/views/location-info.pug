@@ -1,0 +1,54 @@
+extends layout
+include _includes/sharedHTMLfunctions
+block content
+	.row.page-header
+		.col-lg-12
+			h1= location.name
+	.row
+		.col-xs-12.col-md-9
+			.row
+				.col-xs-12.col-sm-6
+					p.rating
+						+outputRating(location.rating)
+					p= location.address
+					.panel.panel-primary
+						.panel-heading
+							h2.panel-title= location.openingHoursTitle
+						.panel-body
+							each openingHour in location.openingHours
+								p= openingHour
+					.panel.panel-primary
+						.panel-heading
+							h2.panel-title= location.facilitiesTitle
+						.panel-body
+							each facility in location.facilities
+								span.label.label-warning
+								span.glyphicon.glyphicon-ok
+								| &nbsp;#{facility}
+								| &nbsp;
+				.col-xs-12.col-sm-6.location-map
+					.panel.panel-primary
+						.panel-heading
+							h2.panel-title= "Localtion map"
+						.panel-body
+							- var apiKey = "AIzaSyAC3bAMJx5-EXrZ9UDGoJ20g9_3AfD4zoE";
+							img.img-responsive.img-rounded(src="http://maps.googleapis.com/maps/api/staticmap?center=" + location.longitude + "," + location.latitude + "&zoom=16&size=400x350&sensor=false&markers=" + location.longitude + "," + location.latitude + "&scale=1&key=" + apiKey)
+			.row
+				.col-xs-12
+					.panel.panel-primary.review-panel
+						.panel-heading
+							a.btn.btn-default.pull-right(href='/location/review/new/' + location.id) Add review
+							h2.panel-title Customer reviews
+						.panel-body.review-container
+							each review in location.customerReviews
+								.row
+									.review
+										.well.well-sm.review-header
+											span.rating
+												+outputRating(review.rating)
+											span.reviewAuthor= review.author
+											small.reviewTimestamp= review.timeStamp
+									.col-xs-12
+										p= review.comment
+		.col-xs-12.col-md-3
+			!= sidebar
