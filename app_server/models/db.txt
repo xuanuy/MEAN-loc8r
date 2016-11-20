@@ -1,0 +1,115 @@
+db.locations.save({
+    id: "01",
+    name: 'Starcups',
+    address: '125 High Street, Reading, RG6 1PS',
+    rating: 3,
+    facilitiesTitle: " Opening hours",
+    facilities: ['Hot drinks', 'Food', 'Premium wifi'],
+    distance: '100m',
+    openingHoursTitle: " Opening hours",
+    openingHours: [{
+        days: "Monday - Friday",
+        opening: "7:00am",
+        closing: "7:00pm",
+        closed: false
+    }, {
+        days: "Saturday",
+        opening: "8:00am",
+        closing: "5:00pm",
+        closed: false
+    }, {
+        days: "Sunday",
+        closed: true
+    }],
+    coords: {type: "Point", coordinates: [10.8558625, 106.633304]},
+    customerReviews: [{
+        rating: 5,
+        author: "Simon Holmes",
+        createdOn: new Date("16 July 2013"),
+        comment: "What a great place. I can't say enough good things about it."
+    }, {
+        rating: 3,
+        author: "Charlie Chaplin",
+        createdOn: new Date("16 June 2013"),
+        comment: "It was okay. Coffee wasn't great, but the wifi was fast."
+    }]
+}, {
+    id: "02",
+    name: 'Cafe Hero',
+    address: '125 High Street, Reading, RG6 1PS',
+    rating: 4,
+    facilitiesTitle: " Opening hours",
+    facilities: ['Hot drinks', 'Food', 'Premium wifi'],
+    distance: '200m',
+    openingHoursTitle: " Opening hours",
+    openingHours: [{
+        days: "Monday - Friday",
+        opening: "8:00am",
+        closing: "6:00pm",
+        closed: false
+    }, {
+        days: "Saturday",
+        opening: "8:00am",
+        closing: "5:00pm",
+        closed: false
+    }, {
+        days: "Sunday",
+        closed: true
+    }],
+    cords: [10.8297126, 106.6226396],
+    customerReviews: [{
+        rating: 5,
+        author: "Simon Holmes",
+        createdOn: new Date("16 July 2014"),
+        comment: "What a great place. I can't say enough good things about it."
+    }, {
+        rating: 3,
+        author: "Charlie Chaplin",
+        createdOn: new Date("16 July 2014"),
+        comment: "It was okay. Coffee wasn't great, but the wifi was fast."
+    }]
+}, {
+    id: "03",
+    name: 'Burger Queen',
+    address: '125 High Street, Reading, RG6 1PS',
+    rating: 2,
+    facilitiesTitle: " Opening hours",
+    facilities: ['Food', 'Premium wifi'],
+    distance: '250m',
+    openingHoursTitle: " Opening hours",
+    openingHours: [{
+        days: "Monday - Friday",
+        opening: "7:00am",
+        closing: "7:00pm",
+        closed: false
+    }, {
+        days: "Saturday",
+        opening: "8:00am",
+        closing: "5:00pm",
+        closed: false
+    }, {
+        days: "Sunday",
+        closed: true
+    }],
+    cords: [10.8043699, 106.6362217],
+    customerReviews: [{
+        rating: 5,
+        author: "Simon Holmes",
+        createdOn: new Date("16 June 2015"),
+        comment: "What a great place. I can't say enough good things about it."
+    }, {
+        rating: 3,
+        author: "Charlie Chaplin",
+        createdOn: new Date("16 June 2015"),
+        comment: "It was okay. Coffee wasn't great, but the wifi was fast."
+    }]
+})
+
+// Update
+db.locations.update({
+    id: "01"
+}, {
+    $set: {
+        "customerReviews.0.createdOn": new Date("16 July 2013")
+    }
+})

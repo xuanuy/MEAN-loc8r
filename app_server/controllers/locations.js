@@ -1,88 +1,55 @@
 var index = require('./main');
-var querystring = require('querystring');
+var mongoose = require('mongoose');
 
-var locations = [{
-    id: "01",
-    name: 'Starcups',
-    address: '125 High Street, Reading, RG6 1PS',
-    rating: 3,
-    facilitiesTitle: " Opening hours",
-    facilities: ['Hot drinks', 'Food', 'Premium wifi'],
-    distance: '100m',
-    openingHoursTitle: " Opening hours",
-    openingHours: [
-        "Monday - Friday : 7:00am - 7:00pm",
-        "Saturday : 8:00am - 5:00pm",
-        "Sunday : closed"
-    ],
-    longitude: 10.8558625,
-    latitude: 106.633304,
-    customerReviews: [{
-        rating: 5,
-        author: "Simon Holmes",
-        timestamp: "16 July 2013",
-        comment: "What a great place. I can't say enough good things about it."
-    }, {
-        rating: 3,
-        author: "Charlie Chaplin",
-        timestamp: "16 June 2013",
-        comment: "It was okay. Coffee wasn't great, but the wifi was fast."
-    }]
-}, {
-    id: "02",
-    name: 'Cafe Hero',
-    address: '125 High Street, Reading, RG6 1PS',
-    rating: 4,
-    facilitiesTitle: " Opening hours",
-    facilities: ['Hot drinks', 'Food', 'Premium wifi'],
-    distance: '200m',
-    openingHoursTitle: " Opening hours",
-    openingHours: [
-        "Monday - Friday : 7:00am - 7:00pm",
-        "Saturday : 8:00am - 5:00pm",
-        "Sunday : closed"
-    ],
-    longitude: 10.8297126,
-    latitude: 106.6226396,
-    customerReviews: [{
-        rating: 5,
-        author: "Simon Holmes",
-        timestamp: "16 July 2013",
-        comment: "What a great place. I can't say enough good things about it."
-    }, {
-        rating: 3,
-        author: "Charlie Chaplin",
-        timestamp: "16 June 2013",
-        comment: "It was okay. Coffee wasn't great, but the wifi was fast."
-    }]
-}, {
-    id: "03",
-    name: 'Burger Queen',
-    address: '125 High Street, Reading, RG6 1PS',
-    rating: 2,
-    facilitiesTitle: " Opening hours",
-    facilities: ['Food', 'Premium wifi'],
-    distance: '250m',
-    openingHoursTitle: " Opening hours",
-    openingHours: [
-        "Monday - Friday : 7:00am - 7:00pm",
-        "Saturday : 8:00am - 5:00pm",
-        "Sunday : closed"
-    ],
-    longitude: 10.8043699,
-    latitude: 106.6362217,
-    customerReviews: [{
-        rating: 5,
-        author: "Simon Holmes",
-        timestamp: "16 July 2013",
-        comment: "What a great place. I can't say enough good things about it."
-    }, {
-        rating: 3,
-        author: "Charlie Chaplin",
-        timestamp: "16 June 2013",
-        comment: "It was okay. Coffee wasn't great, but the wifi was fast."
-    }]
-}];
+var customerReviewScheme = new mongoose.Schema({
+    rating: {type: Number, "default": 0, min: 0, max: 5},
+    author: String,
+    createdOn: {type: Date, "default": Date.now()},
+    comment: String
+});
+
+var openingHourSchema = new mongoose.Schema({
+    days: {type: String, required: true},
+    opening: String,
+    closing: String,
+    closed: {type: Boolean, required: true}
+});
+
+var coordination = new mongoose.Schema({
+    location: {
+        type: Object,
+        index: '2dsphere',
+        label: 'MongoDB spesific coordinates field'
+    },
+    'location.type': {
+        type: String,
+        allowedValues: ['Point'],
+        label: 'Typeof coordinates - Point'
+    },
+    'location.coordinates': {
+        type: [Number],
+        decimal: true,
+        label: 'Array of coordinates in MongoDB style \[Lng, Lat\]'
+    }
+});
+
+var locationScheme = new mongoose.Schema({
+    id: String,
+    name: {type: String, require: true},
+    address: String,
+    rating: {type: Number, "default": 0, min: 0, max: 5},
+    facilitiesTitle: String,
+    facilities: [String],
+    distance: String,
+    openingHoursTitle: String,
+    openingHours: [openingHourSchema],
+    coords: coordination,
+    customerReviews: [customerReviewScheme]
+});
+
+mongoose.model('Location', locationScheme/*, 'Locations'*/);
+
+var locations = mongoose.locations.find();
 
 function getLocation(locationId) {
     var result = null;
